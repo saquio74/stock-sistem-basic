@@ -3,12 +3,12 @@
         <v-dialog
             v-model="dialog"
             scrollable
-            max-width="40%"
+            max-width="80%"
         >   
             <v-card class="text-center">
                 <v-card-text style="height: 60%;">
                 
-                    <vue-bar v-bind:value="barcodeValue">
+                    <vue-bar v-bind:value="barcodeValue" :options="options">
                         Show this if the rendering fails.
                     </vue-bar>
                 </v-card-text>
@@ -40,7 +40,10 @@ export default {
     },
     data:()=>{
         return {
-            dialog:false
+            dialog:false,
+            options:{
+                format: 'EAN13'
+            }
         }
     },
     watch:{

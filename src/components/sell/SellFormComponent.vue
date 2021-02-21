@@ -10,7 +10,7 @@
                 >
                     <v-container >
                         <v-row>
-                        <barcode-reader />
+                        <barcode-reader @productCodebar="productBar = $event" />
                             <v-col
                             cols="12"
                             md="4"
@@ -75,6 +75,7 @@ export default {
         return{
             productName:'',
             value:'',
+            productBar:{},
             product:{}
         }
     },
@@ -100,7 +101,14 @@ export default {
                 return valor.name.toUpperCase().includes(this.productName.toUpperCase())
             });
         }
+    },
+    watch:{
+        productBar(product){
+            this.productName = product.name
+            this.product = product
+        }
     }
+   
 }
 </script>
 <style scoped>
