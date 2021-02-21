@@ -1,10 +1,16 @@
 <template>
     <div>
-        <template>
+        <template >
             <v-form>
-                <v-card>
-                    <v-container>
+                <v-card
+                class="overflow-hidden"
+                color="purple "
+                dark
+                
+                >
+                    <v-container >
                         <v-row>
+                        <barcode-reader />
                             <v-col
                             cols="12"
                             md="4"
@@ -14,6 +20,7 @@
                                 v-model="productName"
                                 label="Nombre del producto"
                                 required
+                                class="text-input-blue"
                             ></v-text-field>
                             </v-col>
                             <v-col
@@ -22,9 +29,9 @@
                             
                             >
                         
-                                <v-simple-table height="150px" fixed-header>
+                                <v-simple-table height="160px" fixed-header class="purple lighten-2">
                                     <template>
-                                        <thead>
+                                        <thead class="cyan">
                                             <tr>
                                                 <th class="text-left">
                                                     Nombre
@@ -60,9 +67,10 @@
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
+import BarcodeReader from '../Barcode/BarcodeReader.vue'
 import SellForm from './SellForm.vue'
 export default {
-    components: { SellForm },
+    components: { SellForm, BarcodeReader },
     data:()=>{
         return{
             productName:'',
@@ -95,3 +103,8 @@ export default {
     }
 }
 </script>
+<style scoped>
+.text-input-blue .v-text-field__slot input {
+   color: #00f !important;
+}
+</style>

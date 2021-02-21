@@ -1,9 +1,12 @@
 <template>
     <div>
         
-        <v-simple-table 
+        <v-simple-table
+        class="cyan"
+        dark 
         primary
         fixed-header
+        
         >
             <template v-slot:default>
             <thead>
@@ -24,20 +27,15 @@
                         Stock
                     </th>
                     <th class="text-left">
-                        Editar
+                        opciones
                     </th>
-                    <th class="text-left">
-                        Borrar
-                    </th>
-                    <th class="text-left">
-                        +Stock
-                    </th>
+                   
                 </tr>
             </thead>
             <tbody>
                 <tr
                 v-for="item in productsFilter"
-                :key="item.name"
+                :key="item.id"
                 
                 >
                     <td>{{ item.name }}</td>
@@ -55,27 +53,31 @@
                             <v-icon>mdi-lead-pencil</v-icon>
                             
                         </v-btn>
-                    </td>
-                    <td>
                         <v-btn 
                         align="center"
-                        color="error" 
+                        color="red" 
                         justify="center"
                         @click="deleteProduct(item.id)"
                         >
                             <v-icon danger>mdi-delete</v-icon>
                         </v-btn>
-                    </td>
-                    <td>
                         <v-btn 
                         align="center"
-                        color="cyan" 
+                        color="purple" 
                         justify="center"
                         @click="setProduct(item,'addStock')"
                         >
                             <v-icon danger>mdi-plus</v-icon>
                         </v-btn>
                        
+                        <v-btn 
+                        align="center"
+                        color="orange" 
+                        justify="center"
+                        @click="barcode(`${item.id} ${item.name}`)"
+                        >
+                            <v-icon danger>mdi-barcode</v-icon>
+                        </v-btn>
                     </td>
                 </tr>
             </tbody>
@@ -83,7 +85,8 @@
         </v-simple-table>
         <totals-component />
         <add-product />
-        <update-product :product="product" :abrir="open"/>
+        <barcode-component :barcodeValue="barcodeValue" :openBarcode="openBarcode" />
+        <update-product :product="product" :abrir="open" :openUpdate="openUpdate" />
          <v-snackbar
             v-model="snackbar"
             :timeout="timeout"
@@ -110,6 +113,7 @@ import updateProduct from './UpdateProductComponent'
 import totalsComponent from './TotalsComponent'
 import axios from 'axios'
 import swal from 'sweetalert2'
+import BarcodeComponent from '../Barcode/BarcodeComponent'
 
 
 export default {
@@ -121,12 +125,16 @@ export default {
             snackbar : false,
             product: {},
             open:'',
+            barcodeValue: '',
+            openBarcode: 0,
+            openUpdate: 0,
         }
     },
     components:{
         addProduct,
         updateProduct,
         totalsComponent,
+        BarcodeComponent,
     },
     created(){
         this.productsVerify()
@@ -167,7 +175,12 @@ export default {
         setProduct(product,type){
             this.product = product
             this.open = type
-            this.openModal(true)
+            this.openUpdate = this.openUpdate == 0? 1:0
+            
+        },
+        barcode(code){
+            this.barcodeValue = code
+            this.openBarcode = this.openBarcode == 0? 1:0
         }
     },
     computed:{

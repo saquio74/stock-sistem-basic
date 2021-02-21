@@ -77,13 +77,14 @@
                     <v-btn
                         color="blue darken-1"
                         text
-                        @click="openModal(false)"
+                        @click="open = false"
                     >
                         Close
                     </v-btn>
                     <v-btn
                         color="blue darken-1"
                         text
+                        :loading ="loading"
                         @click="saveProduct(product)"
                     >
                         Guardar
@@ -129,20 +130,21 @@
                     </v-card-text>
                     <v-divider></v-divider>
                     <v-card-actions>
-                    <v-btn
-                        color="blue darken-1"
-                        text
-                        @click="openModal(false)"
-                    >
-                        Close
-                    </v-btn>
-                    <v-btn
-                        color="blue darken-1"
-                        text
-                        @click="addStock(product,newUnits)"
-                    >
-                        Guardar
-                    </v-btn>
+                        <v-btn
+                            color="blue darken-1"
+                            text
+                            @click="open = false"
+                        >
+                            Close
+                        </v-btn>
+                        <v-btn
+                            color="blue darken-1"
+                            text
+                            :loading="loading"
+                            @click="addStock(product,newUnits)"
+                        >
+                            Guardar
+                        </v-btn>
                     </v-card-actions>
                 </v-card>
             </v-dialog>
@@ -169,12 +171,13 @@
 </template>
 <script>
 import axios from 'axios'
-import { mapActions, mapState } from 'vuex'
+import { mapActions } from 'vuex'
 export default {
     props:[
 
         'product',
-        'abrir'
+        'abrir',
+        'openUpdate'
 
     ]
     ,
@@ -184,6 +187,8 @@ export default {
             snackbar: false,
             timeout: 2000,
             response: '',
+            loading: false,
+            open: false,
             newUnits: 0,
             rules: [
                 value => !!value || 'Requerido.',
@@ -196,19 +201,22 @@ export default {
         }
     },
     methods:{
-        ...mapActions(['getProducts','openModal']),
+        ...mapActions(['getProducts']),
  
         async saveProduct(product){
+            this.loading = true
             try {
                 let response  = await axios.put('productos',product)
                 
                 this.response = response.data.message
                 this.getProducts();
-                this.openModal(false);
+                this.open = false;
                 this.snackbar = true
+                this.loading = false
             } catch (error) {
                 this.response = error
                 this.snackbar = true
+                this.loading = false
                 
             }
             
@@ -216,29 +224,35 @@ export default {
         async addStock(product,newUnits){
             product.stock = Number(newUnits) + Number(product.stock);
             try {
+                this.loading = true
                 let response  = await axios.put('productos',product)
                 
                 this.response = response.data.message
                 this.getProducts();
-                this.openModal(false);
+                this.open = false;
                 this.newUnits = 0
                 this.snackbar = true
+                this.loading = false
             } catch (error) {
                 this.response = error
                 this.snackbar = true
+                this.loading = false
                 
             }
         }
     },
     computed:{
-        ...mapState(['open']),
         rulesSell(){
             return [
                 value => !!value || 'Requerido.',
                 value => value - this.product.price_cost > 0 || 'El valor debe ser mayor al costo' 
             ]
         },
-
     },
+    watch:{
+        openUpdate(){
+            this.open = true
+        }
+    }
 }
 </script>

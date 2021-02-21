@@ -10,7 +10,6 @@ export default new Vuex.Store({
 	state: {
 		products: [],
 		sales: [],
-		open: false,
 	},
 	mutations: {
 		CHARGEPRODUCTS: (state,products) => {
@@ -19,9 +18,6 @@ export default new Vuex.Store({
 		CHARGESALES: (state, sales)=>{
 			state.sales = sales
 		},
-		SETOPEN: (state,open)=>{
-			state.open = open
-		},
 	},
 	actions: {
 		async getProducts({commit}){
@@ -29,9 +25,6 @@ export default new Vuex.Store({
 			const response = await axios.get(url)
 			const productos  = response.data
 			return commit('CHARGEPRODUCTS', productos);
-		},
-		openModal({commit},open){
-			return commit('SETOPEN',open);
 		},
 		async getSales({commit}){
 			moment.locale('es');

@@ -1,6 +1,8 @@
 <template>
     <div>
-        <v-card-title>
+        <v-card-title
+        class="cyan"
+        >
         Ventas
         <br>
         total de ventas del dia {{todaySale}}
@@ -34,13 +36,15 @@
         </v-row>
         </v-card-title>
         <v-data-table
+        
         :headers="headers"
         :items="filterSales"
+        
         :footer-props="{
             'items-per-page-options': [todaySale,50, 60, 100, 200, 300]
         }"
         
-        class="elevation-1">
+        class="purple elevation-1">
         <template v-slot:[`item.actions`]="{ item }">
             <v-btn
             depressed

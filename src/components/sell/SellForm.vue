@@ -6,6 +6,9 @@
         @submit.prevent="sellProduct()"
     >
         <v-card
+            
+                color="cyan lighten-1"
+                dark
             class="mx-auto my-12"
         >
             <v-container>
@@ -54,7 +57,7 @@
                     cols="12"
                     md="6"
                     >
-                        <v-btn color='cyan'
+                        <v-btn color='purple'
                         :loading ="loading"
                         :disabled="!valid"
                         @click="sellProduct()">
